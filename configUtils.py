@@ -44,6 +44,18 @@ class BaseConf:
         newDict.pop("SITES")
         return newDict
 
+    @property
+    def projectPath(self):
+        """
+        """
+        return self.getValue("PROJECT_PATH", True)
+
+    @property
+    def projectName(self):
+        """
+        """
+        return self.getValue("PROJECT_PATH", True).split("/")[-1]
+
 class TaskConf(BaseConf):
     """
     """
@@ -57,7 +69,6 @@ class TaskConf(BaseConf):
         """
         """
         return self.getValue("SITE", True)
-
 
 class JobConf(BaseConf):
     """
@@ -78,12 +89,11 @@ class JobConf(BaseConf):
         """
         """
         #task by site
-        for site in sites:
+        for siteDict in self.sites:
             data=self.commonsDict
-            data["SITE"]=site
+            data["SITE"]=siteDict
             #gen task
             yield TaskConf(data)
-
 
 # ======================== Confs Workers ==========================
 class FromFile(JobConf):
