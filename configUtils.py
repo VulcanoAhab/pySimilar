@@ -18,8 +18,8 @@ class BaseConf:
     def _monthYearRange(stringMonthYearStart, stringMonthYearEnd):
         """
         """
-        start=Api._monthYear(stringMonthYearStart)
-        end=Api._monthYear(stringMonthYearEnd)
+        start=BaseConf._monthYear(stringMonthYearStart)
+        end=BaseConf._monthYear(stringMonthYearEnd)
         yearDiff=end["year"]-start["year"]
         max_month=13
         if not yearDiff:
@@ -139,7 +139,8 @@ class JobConf(BaseConf):
     def tasksGeneratorByMonth(self):
         """
         """
-        dateRange=self.doDateRange()
+        dateRange=self.dateRange
+        print("## DATE RANGE", dateRange)
         for siteDict in self.sites:
             for date in dateRange:
                 data=self.commonsDict
@@ -150,7 +151,7 @@ class JobConf(BaseConf):
                 yield TaskConf(data)
 
     @property
-    def doDateRange(self):
+    def dateRange(self):
         """
         """
         return JobConf._monthYearRange(self.start_date, self.end_date)
