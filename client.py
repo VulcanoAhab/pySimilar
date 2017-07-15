@@ -1,3 +1,6 @@
+import requests
+import copy
+
 class Generic:
     """
     """
