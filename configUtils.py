@@ -140,7 +140,6 @@ class JobConf(BaseConf):
         """
         """
         dateRange=self.dateRange
-        print("## DATE RANGE", dateRange)
         for siteDict in self.sites:
             for date in dateRange:
                 data=self.commonsDict
