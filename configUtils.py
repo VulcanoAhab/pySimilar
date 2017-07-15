@@ -36,6 +36,13 @@ class BaseConf:
         """
         return self.getValue("END_DATE", True)
 
+
+    @property
+    def granularity(self):
+        """
+        """
+        return self.getValue("GRANULARITY", True)
+
     @property
     def commonsDict(self):
         """
