@@ -6,6 +6,38 @@ import copy
 class BaseConf:
     """
     """
+    @staticmethod
+    def _monthYear(stringMonthYear):
+        """
+        """
+        year, month=[int(d.strip())
+                     for d in stringMonthYear.split("-")]
+        return {"month":month, "year":year}
+
+    @staticmethod
+    def _monthYearRange(stringMonthYearStart, stringMonthYearEnd):
+        """
+        """
+        start=Api._monthYear(stringMonthYearStart)
+        end=Api._monthYear(stringMonthYearEnd)
+        yearDiff=end["year"]-start["year"]
+        max_month=13
+        if not yearDiff:
+            callRange=["{}-{:02d}".format(end["year"],month)
+                      for month in range(start["month"], end["month"]+1)]
+            return callRange
+
+        callRange=["{}-{:02d}".format(start["year"],month)
+                  for month in range(start["month"], max_month)]
+        year=start["year"]
+        for _ in range(yearDiff):
+            year+=1
+            if year == end["year"]:
+                max_month=end["month"]+1
+            for month in range(1,max_month):
+                callRange.append("{}-{:02d}".format(year,month))
+        return callRange
+
     def __init__(self, data):
         """
         """
@@ -36,7 +68,6 @@ class BaseConf:
         """
         return self.getValue("END_DATE", True)
 
-
     @property
     def granularity(self):
         """
@@ -63,6 +94,7 @@ class BaseConf:
         """
         return self.getValue("PROJECT_PATH", True).split("/")[-1]
 
+
 class TaskConf(BaseConf):
     """
     """
@@ -76,6 +108,7 @@ class TaskConf(BaseConf):
         """
         """
         return self.getValue("SITE", True)
+
 
 class JobConf(BaseConf):
     """
@@ -101,6 +134,21 @@ class JobConf(BaseConf):
             data["SITE"]=siteDict
             #gen task
             yield TaskConf(data)
+
+    @property
+    def tasksGeneratorByMonth(self):
+        """
+        """
+        dateRange=JobConf._monthYearRange(self.start_date, self.end_date)
+        for siteDict in self.sites:
+            for date in dateRange:
+                data=self.commonsDict
+                data["SITE"]=siteDict
+                data["START_DATE"]=date
+                data["END_DATE"]=date
+                #gen task
+                yield TaskConf(data)
+
 
 # ======================== Confs Workers ==========================
 class FromFile(JobConf):

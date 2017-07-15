@@ -29,38 +29,6 @@ class Generic:
         # default
         self.main_domain_only=False
 
-    @staticmethod
-    def _monthYear(stringMonthYear):
-        """
-        """
-        year, month=[int(d.strip())
-                     for d in stringMonthYear.split("-")]
-        return {"month":month, "year":year}
-
-    @staticmethod
-    def _monthYearRange(stringMonthYearStart, stringMonthYearEnd):
-        """
-        """
-        start=Api._monthYear(stringMonthYearStart)
-        end=Api._monthYear(stringMonthYearEnd)
-        yearDiff=end["year"]-start["year"]
-        max_month=13
-        if not yearDiff:
-            callRange=["{}-{:02d}".format(end["year"],month)
-                      for month in range(start["month"], end["month"]+1)]
-            return callRange
-
-        callRange=["{}-{:02d}".format(start["year"],month)
-                  for month in range(start["month"], max_month)]
-        year=start["year"]
-        for _ in range(yearDiff):
-            year+=1
-            if year == end["year"]:
-                max_month=end["month"]+1
-            for month in range(1,max_month):
-                callRange.append("{}-{:02d}".format(year,month))
-        return callRange
-
     def _traffic_url(self, endpoint):
         """
         """
