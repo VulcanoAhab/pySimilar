@@ -139,7 +139,7 @@ class JobConf(BaseConf):
     def tasksGeneratorByMonth(self):
         """
         """
-        dateRange=JobConf._monthYearRange(self.start_date, self.end_date)
+        dateRange=self.doDateRange()
         for siteDict in self.sites:
             for date in dateRange:
                 data=self.commonsDict
@@ -148,6 +148,13 @@ class JobConf(BaseConf):
                 data["END_DATE"]=date
                 #gen task
                 yield TaskConf(data)
+
+    @property
+    def doDateRange(self):
+        """
+        """
+        return JobConf._monthYearRange(self.start_date, self.end_date)
+
 
 
 # ======================== Confs Workers ==========================
