@@ -93,7 +93,11 @@ class Generic:
     def _traffic_get(self, url, params):
         """
         """
-        r=requests.get(url, params=params)
+        try:
+            r=requests.get(url, params=params)
+        except Exception as e:
+            print("[-] Request exception: {} from url: {}".format(e, url))
+            return None
         if r.status_code != 200:
             msg="[-] Request fail. Status:{} "\
                 "Msg:{} | URL: {}".format(r.status_code,r.content, url)
